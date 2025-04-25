@@ -28,7 +28,10 @@
 ## run project
 
 $ npm run dev
+
 $ http://localhost:3001/api/hello -> hello world
+
+$ http://localhost:3001/api/docs ->api document
 
 ## environment variable
 
@@ -36,6 +39,7 @@ $ http://localhost:3001/api/hello -> hello world
 PORT = 3001;
 DATABASE_URL =
   'mongodb+srv://duonght2004itsgu:duong050304@pos.2bbfdj6.mongodb.net/?retryWrites=true&w=majority&appName=POS';
+JWT_SECRET_KEY = 'me6MRZk1iUHH1xWP';
 ```
 
 ## Project setup

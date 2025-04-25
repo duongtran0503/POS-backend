@@ -9,10 +9,10 @@ export class Category {
   @Prop({ required: true })
   name: string;
 
-  @Prop()
+  @Prop({ default: null })
   description: string;
 
-  @Prop()
+  @Prop({ default: null })
   image: string;
 }
 
