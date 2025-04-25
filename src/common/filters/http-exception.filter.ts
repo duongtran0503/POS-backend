@@ -3,6 +3,7 @@ import {
   ExceptionFilter,
   HttpException,
   Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import {
@@ -18,9 +19,12 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       const statusCode = exception.getStatus();
       const exceptionResponse: any = exception.getResponse();
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const message =
+      let message =
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         exceptionResponse?.message || exception.message || 'Bad reqest';
+      if (exception instanceof UnauthorizedException) {
+        message = 'Người dùng không có quyền truy cập!';
+      }
       response.status(statusCode).json(errorResponse(message, statusCode));
     } else {
       console.log('server error:', exception);

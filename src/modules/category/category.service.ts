@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   InternalServerErrorException,
@@ -6,6 +7,8 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateCategoryRequest } from 'src/modules/category/dto/request/create.category.request';
+import { SearchCategoryRequest } from 'src/modules/category/dto/request/search.category.request';
+import { UpdateCategoryRequest } from 'src/modules/category/dto/request/update.category.request';
 import { Category, CategoryDocument } from 'src/schemas/category.schema';
 
 @Injectable()
@@ -27,6 +30,74 @@ export class CatgegoryService {
         throw error;
       }
       throw new InternalServerErrorException();
+    }
+  }
+
+  async getAllCategory() {
+    try {
+      const categoies = await this.categoryModel.find();
+      return categoies;
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async updateCategory(data: UpdateCategoryRequest, id: string) {
+    try {
+      const check = await this.categoryModel.exists({ _id: id });
+      if (!check) throw new BadRequestException('Danh mục không tồn tại!');
+      const update = await this.categoryModel.findByIdAndUpdate(
+        id,
+        {
+          ...data,
+        },
+        { new: true },
+      );
+      return update;
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async deleteCategory(id: string) {
+    try {
+      await this.categoryModel.findByIdAndDelete(id);
+    } catch (error) {
+      console.error('delete category error:', error);
+    }
+  }
+
+  async searchCategory(query: SearchCategoryRequest) {
+    try {
+      const condition: any[] = [];
+      if (query.name) {
+        condition.push({ name: { $regex: new RegExp(query.name, 'i') } });
+      }
+      if (query.code) {
+        condition.push({
+          categoryCode: { $regex: new RegExp(query.code, 'i') },
+        });
+      }
+      if (condition.length > 0) {
+        return await this.categoryModel.find({ $or: condition });
+      }
+      return await this.categoryModel.find();
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async findCategoryById(id: string) {
+    try {
+      return this.categoryModel.findById(id);
+    } catch (error) {
+      console.error(error);
+      return null;
     }
   }
 }

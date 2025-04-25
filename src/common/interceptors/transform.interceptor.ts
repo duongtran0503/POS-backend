@@ -19,7 +19,7 @@ export class TransformInterceptor<T> implements NestInterceptor<T, any> {
         const message = data?.message;
         const result = data?.data ?? data;
 
-        return successResponse(result, message, statusCode);
+        return successResponse(result, message, true, statusCode);
       }),
     );
   }
