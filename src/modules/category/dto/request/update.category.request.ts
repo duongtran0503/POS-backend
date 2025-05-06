@@ -1,5 +1,12 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+import {
+  IsEnum,
+  IsOptional,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
+import { CategoryTypeEnum } from 'src/enums/category.type.enum';
 
 export class UpdateCategoryRequest {
   @ApiPropertyOptional()
@@ -18,4 +25,9 @@ export class UpdateCategoryRequest {
   @IsOptional()
   @IsString()
   image: string;
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  @IsEnum(CategoryTypeEnum)
+  type?: CategoryTypeEnum;
 }

@@ -72,14 +72,27 @@ export class ProductService {
 
   async getProducts(query: QueryProductRequest) {
     try {
-      const page = !query.page && query.page > 0 ? query.page : 1;
+      const page = query.page ?? 1;
       const itemsPerPage = query.itemsPerPage ?? 10;
       const next = (page - 1) * itemsPerPage;
-      const products = await this.productModel
-        .find()
-        .skip(next)
-        .limit(itemsPerPage);
-      const totalProduct = await this.productModel.countDocuments();
+      let products: any[];
+      let totalProduct: number;
+      if (query.type) {
+        products = await this.productModel
+          .find({ type: query.type })
+          .skip(next)
+          .limit(itemsPerPage);
+        totalProduct = await this.productModel.countDocuments({
+          type: query.type,
+        });
+      } else {
+        products = await this.productModel
+          .find()
+          .skip(next)
+          .limit(itemsPerPage);
+        totalProduct = await this.productModel.countDocuments();
+      }
+
       let currentItemsPerPage = next + itemsPerPage;
       if (totalProduct < currentItemsPerPage)
         currentItemsPerPage = totalProduct;
@@ -103,6 +116,9 @@ export class ProductService {
       }
       if (query.category) {
         condition.push({ category: query.category });
+      }
+      if (query.type) {
+        condition.push({ type: query.type });
       }
       if (condition.length > 0) {
         return await this.productModel.find({ $and: condition });

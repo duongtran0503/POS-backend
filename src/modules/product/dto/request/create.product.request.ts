@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsBoolean,
+  IsEnum,
   IsMongoId,
   IsNotEmpty,
   IsNumber,
@@ -8,6 +9,7 @@ import {
   IsString,
   Min,
 } from 'class-validator';
+import { ProductTypeEnum } from 'src/enums/product.type.enum';
 
 export class CreateProductRequest {
   @ApiProperty()
@@ -46,4 +48,9 @@ export class CreateProductRequest {
   @IsOptional()
   @IsBoolean()
   isAvailable: boolean;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsEnum(ProductTypeEnum)
+  type?: ProductTypeEnum;
 }

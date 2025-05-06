@@ -15,6 +15,7 @@ import { Roles } from 'src/decorator/role.decorator';
 import { Role } from 'src/enums/role.enum';
 import { CatgegoryService } from 'src/modules/category/category.service';
 import { CreateCategoryRequest } from 'src/modules/category/dto/request/create.category.request';
+import { QueryCategoryRequest } from 'src/modules/category/dto/request/query.category';
 import { SearchCategoryRequest } from 'src/modules/category/dto/request/search.category.request';
 import { UpdateCategoryRequest } from 'src/modules/category/dto/request/update.category.request';
 
@@ -31,8 +32,8 @@ export class CategoryController {
 
   @Public()
   @Get()
-  getAllCategories() {
-    return this.categoryService.getAllCategory();
+  getAllCategories(@Query() query: QueryCategoryRequest) {
+    return this.categoryService.getAllCategory(query);
   }
 
   @Roles(Role.ADMIN)

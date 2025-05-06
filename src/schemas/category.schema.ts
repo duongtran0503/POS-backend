@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { CategoryTypeEnum } from 'src/enums/category.type.enum';
 
 @Schema({ timestamps: true })
 export class Category {
@@ -14,6 +15,13 @@ export class Category {
 
   @Prop({ default: null })
   image: string;
+
+  @Prop({
+    type: String,
+    enum: CategoryTypeEnum,
+    default: CategoryTypeEnum.FOOD,
+  })
+  type: string;
 }
 
 export type CategoryDocument = Document & Category;

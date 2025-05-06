@@ -7,6 +7,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateCategoryRequest } from 'src/modules/category/dto/request/create.category.request';
+import { QueryCategoryRequest } from 'src/modules/category/dto/request/query.category';
 import { SearchCategoryRequest } from 'src/modules/category/dto/request/search.category.request';
 import { UpdateCategoryRequest } from 'src/modules/category/dto/request/update.category.request';
 import { Category, CategoryDocument } from 'src/schemas/category.schema';
@@ -33,10 +34,13 @@ export class CatgegoryService {
     }
   }
 
-  async getAllCategory() {
+  async getAllCategory(query: QueryCategoryRequest) {
     try {
-      const categoies = await this.categoryModel.find();
-      return categoies;
+      if (query.type) {
+        return await this.categoryModel.find({ type: query.type });
+      } else {
+        return await this.categoryModel.find();
+      }
     } catch (error) {
       console.error(error);
       throw new InternalServerErrorException();
