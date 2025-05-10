@@ -32,8 +32,7 @@ export class OrderController {
   getAllOrder() {
     return this.orderServie.getAllOrder();
   }
-
-  @Roles(Role.ADMIN, Role.EMPLOYEE)
+  @Public()
   @Get('/detail/:id')
   getDetailOrder(@Param('id', new ValidateMongoId()) id: string) {
     return this.orderServie.getOrderById(id);

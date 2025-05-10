@@ -108,7 +108,10 @@ export class OrderService {
 
   async getAllOrder() {
     try {
-      return await this.orderModel.find();
+      return await this.orderModel
+        .find()
+        .populate(['table'])
+        .sort({ createdAt: -1 });
     } catch (error) {
       console.error(error);
       throw new InternalServerErrorException();
