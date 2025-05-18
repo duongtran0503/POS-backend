@@ -18,6 +18,7 @@ export class Order {
         },
         quantity: { type: Number, require: true, min: 1 },
         notes: { type: String, require: false, default: '' },
+        isNew: { type: Boolean, require: true },
       },
     ],
   })
