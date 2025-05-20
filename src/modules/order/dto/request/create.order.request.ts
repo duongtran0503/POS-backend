@@ -12,6 +12,7 @@ import {
   IsMongoId,
   IsDate,
   ArrayMinSize,
+  IsBoolean,
 } from 'class-validator';
 import { OrderStatusEnum } from 'src/enums/order.status.enum';
 import { OrderTypeEnum } from 'src/enums/order.type.enum';
@@ -33,6 +34,10 @@ export class OrderDetailDTO {
   @IsOptional()
   @IsString()
   notes?: string;
+
+  @ApiPropertyOptional()
+  @IsBoolean()
+  isNew: boolean;
 }
 
 export class CreateOrderRequest {
