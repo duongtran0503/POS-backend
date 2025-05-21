@@ -58,34 +58,6 @@ export class OrderService {
 
   async updateOrder(data: UpdateOrderRequest, id: string) {
     try {
-      const productOrder = data.orderDetails?.map((order) => order.product);
-      if (productOrder) {
-        const products =
-          await this.productService.getAllProductById(productOrder);
-        if (products) {
-          const totalPrice = products
-            .map((product) => {
-              const quantity =
-                data.orderDetails?.find(
-                  (order) => order.product === product._id?.toString(),
-                )?.quantity || 1;
-              return {
-                quantity,
-                product,
-              };
-            })
-            .reduce(
-              (total, current) =>
-                total + current.product.price * current.quantity,
-              0,
-            );
-          if (totalPrice !== data.totalAmount) {
-            throw new BadRequestException('Giá trị đơn hàng không hợp lệ!');
-          }
-        } else {
-          throw new BadRequestException('Lỗi chọn món!');
-        }
-      }
       const update = await this.orderModel.findByIdAndUpdate(id, data, {
         new: true,
       });
